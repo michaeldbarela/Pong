@@ -1,0 +1,11 @@
+# change this file to .gitignore and place in the .git/ directory
+
+.Xil/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.xpr
+*.jou
+*.log
