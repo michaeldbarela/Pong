@@ -33,12 +33,12 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity Pulse_Generator is
     Generic(
-        WIDTH       : positive := 1
+        WIDTH       : positive := 1;
+        MAX_COUNT   : unsigned(WIDTH-1 downto 0)
     );
     Port( 
         clk         : in std_logic;
         reset       : in std_logic;
-        max_count   : in std_logic_vector(WIDTH-1 downto 0);
         pulse       : out std_logic
     );
 end Pulse_Generator;
@@ -67,15 +67,14 @@ begin
 ----------------------------------------------------------------------------------
 -- COMBINATIONAL LOGIC
 ----------------------------------------------------------------------------------
-    process(clk, reset, max_count) begin
-        if(Q = max_count) then 
+    process(clk, reset, MAX_COUNT) begin
+        if(Q = MAX_COUNT) then 
             D <= (others => '0');
         else
             D <= std_logic_vector(unsigned(Q) + 1);
         end if;
     end process;
     
-    pulse <= '1' when (Q = max_count) else
-             '0';
+    pulse <= '1' when (Q = MAX_COUNT) else '0';
 
 end Behavioral;
