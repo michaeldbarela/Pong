@@ -31,78 +31,72 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity Horizontal_Sync is
-	Port(
-		clk 		: in std_logic;
-		reset 		: in std_logic;
-		pulse 		: in std_logic;
-		h_end 		: out std_logic;
-		h_sync 		: out std_logic;
-		h_video_on	: out std_logic;
-		h_count 	: out unsigned(9 downto 0)
-	);
+    Port(
+        clk         : in std_logic;
+        reset       : in std_logic;
+        pulse       : in std_logic;
+        h_end       : out std_logic;
+        h_sync      : out std_logic;
+        h_video_on  : out std_logic;
+        h_count     : out unsigned(9 downto 0)
+    );
 end Horizontal_Sync;
 
 architecture Behavioral of Horizontal_Sync is
 ----------------------------------------------------------------------------------
 -- SIGNAL DECLARATIONS
 ----------------------------------------------------------------------------------
-	-- horizontal display pixels
-	signal HD 			: unsigned(9 downto 0) := to_unsigned(640, 10);
-	-- horizontal front porch pixels
-	signal HF 			: unsigned(3 downto 0) := to_unsigned(16, 4);
-	-- horizontal back porch pixels
-	signal HB 			: unsigned(5 downto 0) := to_unsigned(48, 6);
-	-- horizontal retrace pixels
-	signal HRT 			: unsigned(7 downto 0) := to_unsigned(98, 8);
-	-- current horizontal sync signal
-	signal h_sync_q		: std_logic;
-	-- current horizontal pixel position
-	signal h_count_q	: unsigned(9 downto 0);
-	-- next horizontal sync signal
-	signal h_sync_d		: std_logic;
-	-- next horizonal pixel position
-	signal h_count_d 	: unsigned(9 downto 0);
-	-- h_end buffer signal
-	signal h_end_buf	: std_logic;
+    -- horizontal display pixels
+    signal HD           : unsigned(9 downto 0) := to_unsigned(640, 10);
+    -- horizontal front porch pixels
+    signal HF           : unsigned(3 downto 0) := to_unsigned(16, 4);
+    -- horizontal back porch pixels
+    signal HB           : unsigned(5 downto 0) := to_unsigned(48, 6);
+    -- horizontal retrace pixels
+    signal HRT          : unsigned(7 downto 0) := to_unsigned(98, 8);
+    -- current horizontal sync signal
+    signal h_sync_q     : std_logic;
+    -- current horizontal pixel position
+    signal h_count_q    : unsigned(9 downto 0);
+    -- next horizontal sync signal
+    signal h_sync_d     : std_logic;
+    -- next horizonal pixel position
+    signal h_count_d    : unsigned(9 downto 0);
+    -- h_end buffer signal
+    signal h_end_buf    : std_logic;
 
 begin
 ----------------------------------------------------------------------------------
 -- SEQUENTIAL LOGIC
 ----------------------------------------------------------------------------------
-	-- state logic
-	process(clk, reset) begin
-		if(rising_edge(reset)) then
-			h_sync_q <= '0';
-			h_count_q <= (OTHERS => '0');
-		elsif(rising_edge(clk)) then
-			h_sync_q <= not(h_sync_q);
-			h_count_q <= h_count_d;
-		end if;
-	end process;
+    -- state logic
+    process(clk, reset) begin
+        if(rising_edge(reset)) then
+            h_sync_q <= '0';
+            h_count_q <= (OTHERS => '0');
+        elsif(rising_edge(clk)) then
+            h_sync_q <= not(h_sync_q);
+            h_count_q <= h_count_d;
+        end if;
+    end process;
 
 ----------------------------------------------------------------------------------
 -- COMBINATIONAL LOGIC
 ----------------------------------------------------------------------------------
-	process begin
-		case(pulse) is
-			-- when '1' => h_count_d <= (OTHERS=>'0') when (h_end_buf='1') else (h_count_q + to_unsigned(1,1));
-			when '1' => 
-				if(h_end_buf='1') then 
-					h_count_d <= (OTHERS=>'0');
-				else
-					h_count_d <= h_count_q + to_unsigned(1,1);
-				end if;
-			when others => h_count_d <= h_count_q;
-		end case;
-	end process;
+    process begin
+        case(pulse) is
+            when '1' => h_count_d <= (OTHERS=>'0') when (h_end_buf='1') else (h_count_q + to_unsigned(1,1));
+            when others => h_count_d <= h_count_q;
+        end case;
+    end process;
 
-	h_sync_d <= '1' when ((h_count_q >= (HD+HF)) and (h_count_q <= (HD+HF+HRT-1))) else '0';
-	h_end_buf <= '1' when (h_count_q = (HD+HB+HF+HRT-1)) else '0';
-	
-	-- output signals
-	h_end <= h_end_buf;
-	h_sync <= h_sync_q;
-	h_video_on <= '1' when (unsigned(h_count_q) < unsigned(HD)) else '0';
-	h_count <= h_count_q;
+    h_sync_d <= '1' when ((h_count_q >= (HD+HF)) and (h_count_q <= (HD+HF+HRT-1))) else '0';
+    h_end_buf <= '1' when (h_count_q = (HD+HB+HF+HRT-1)) else '0';
+    
+    -- output signals
+    h_end <= h_end_buf;
+    h_sync <= h_sync_q;
+    h_video_on <= '1' when (unsigned(h_count_q) < unsigned(HD)) else '0';
+    h_count <= h_count_q;
 
 end Behavioral;
