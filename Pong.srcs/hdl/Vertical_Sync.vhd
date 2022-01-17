@@ -39,7 +39,7 @@ entity Vertical_Sync is
         v_video_on  : out std_logic;
         v_end       : out std_logic;
         v_sync      : out std_logic;
-        v_count_q   : out unsigned(9 downto 0)
+        v_count     : out unsigned(9 downto 0)
     );
 end Vertical_Sync;
 
@@ -87,10 +87,10 @@ begin
     process 
         variable concat : std_logic_vector(1 downto 0) := pulse & h_end;
     begin
-        case(concat) begin
+        case(concat) is
             when "11" => 
-                if(v_end = '1') then
-                    v_count_d <= (OTHERS=>'0')
+                if(v_end_buf = '1') then
+                    v_count_d <= (OTHERS=>'0');
                 else
                     v_count_d <= v_count_q + to_unsigned(1,1);
                 end if;
@@ -98,8 +98,8 @@ begin
         end case;
     end process;
 
-    v_sync_d <= '1' when ((v_count_q >= (VD+VF)) and (v_count_q <= (VD+VF+VR-1))) else '0';
-    v_end_buf <= '1' when (v_count_q = (VD+VB+VF+VR-1)) else '0';
+    v_sync_d <= '1' when ((v_count_q >= (VD+VF)) and (v_count_q <= (VD+VF+VRT-1))) else '0';
+    v_end_buf <= '1' when (v_count_q = (VD+VB+VF+VRT-1)) else '0';
 
     -- output signals
     v_end <= v_end_buf;
