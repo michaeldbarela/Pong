@@ -71,7 +71,7 @@ begin
 ----------------------------------------------------------------------------------
 	-- state logic
 	process(clk, reset) begin
-	   if(rising_edge(reset)) then
+		if(rising_edge(reset)) then
 			h_sync_q <= '0';
 			h_count_q <= (OTHERS => '0');
 		elsif(rising_edge(clk)) then
@@ -87,11 +87,11 @@ begin
 		case(pulse) is
 			-- when '1' => h_count_d <= (OTHERS=>'0') when (h_end_buf='1') else (h_count_q + to_unsigned(1,1));
 			when '1' => 
-			     if(h_end_buf='1') then 
-			         h_count_d <= (OTHERS=>'0');
-                 else
-                    h_count_d <= h_count_q + to_unsigned(1,1);
-                 end if;
+				if(h_end_buf='1') then 
+					h_count_d <= (OTHERS=>'0');
+				else
+					h_count_d <= h_count_q + to_unsigned(1,1);
+				end if;
 			when others => h_count_d <= h_count_q;
 		end case;
 	end process;
