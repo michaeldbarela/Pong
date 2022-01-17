@@ -34,7 +34,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity Pulse_Generator is
     Generic(
         WIDTH       : positive := 1;
-        MAX_COUNT   : unsigned(WIDTH-1 downto 0)
+        MAX_COUNT   : std_logic_vector(WIDTH-1 downto 0) := (OTHERS=>'1')
     );
     Port( 
         clk         : in std_logic;
@@ -67,7 +67,7 @@ begin
 ----------------------------------------------------------------------------------
 -- COMBINATIONAL LOGIC
 ----------------------------------------------------------------------------------
-    process(clk, reset, MAX_COUNT) begin
+    process begin
         if(Q = MAX_COUNT) then 
             D <= (others => '0');
         else
