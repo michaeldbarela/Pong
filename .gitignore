@@ -1,0 +1,17 @@
+# change this file to .gitignore and place in root directory of project
+
+# ignore the .gitignore file
+# .gitignore
+
+# Unecessary directories and files created by Vivado
+.Xil/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.xpr
+*.jou
+*.log
+
+# Unecessary directories and files created by Vitis
