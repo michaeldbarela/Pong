@@ -47,8 +47,8 @@ architecture Behavioral of Pulse_Generator_Input is
 ----------------------------------------------------------------------------------
 -- SIGNAL DECLARATIONS
 ----------------------------------------------------------------------------------
-    signal count_q : unsigned(WIDTH-1 downto 0);
-    signal count_d : unsigned(WIDTH-1 downto 0);
+    signal D : std_logic_vector(WIDTH-1 downto 0);
+    signal Q : std_logic_vector(WIDTH-1 downto 0);
 
 begin
 ----------------------------------------------------------------------------------
@@ -56,10 +56,10 @@ begin
 ----------------------------------------------------------------------------------
     -- current-state logic
     process(clk, reset) begin
-        if(rising_edge(reset)) begin
-            count_q <= (OTHERS=>'0');
-        elsif(rising_edge(clk)) begin
-            count_q <= count_d;
+        if(rising_edge(reset)) then
+            Q <= (OTHERS=>'0');
+        elsif(rising_edge(clk)) then
+            Q <= D;
         end if;
     end process;
 
@@ -69,12 +69,12 @@ begin
     -- next-state logic
     process begin
         case(switch) is
-            when '1' => count_d <= (OTHERS=>'0') when (count_q == (MAX_COUNT-1)) else (count_q + to_unsigned(1,1));
-            when others => count_d <= (OTHERS=>'0');
+            when '1' => D <= (OTHERS=>'0') when (Q = MAX_COUNT) else std_logic_vector(unsigned(Q) + 1);
+            when others => D <= (OTHERS=>'0');
         end case;
     end process;
 
     -- output MAX_COUNT*10ns pulse
-    pulse <= '1' when (count_q=(MAX_COUNT-1)) else '0';
+    pulse <= '1' when (Q = MAX_COUNT) else '0';
 
 end Behavioral;
