@@ -88,7 +88,7 @@ begin
         variable concat : std_logic_vector(1 downto 0) := pulse & h_end;
     begin
         case(concat) is
-            when '1' => v_count_d <= (OTHERS=>'0') when (v_end_buf='1') else (v_count_q + to_unsigned(1,1));
+            when "11" => v_count_d <= (OTHERS=>'0') when (v_end_buf='1') else (v_count_q + 1);
             when others => v_count_d <= v_count_q;
         end case;
     end process;
