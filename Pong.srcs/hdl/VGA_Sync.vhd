@@ -34,8 +34,8 @@ entity VGA_Sync is
     Port(
         clk         : in std_logic;
         reset       : in std_logic;
-        h_sync       : out std_logic;
-        v_sync       : out std_logic;
+        h_sync      : out std_logic;
+        v_sync      : out std_logic;
         video_on    : out std_logic;
         pulse       : out std_logic;
         pixel_x     : out unsigned(9 downto 0);
@@ -98,6 +98,7 @@ begin
 -- COMBINATIONAL LOGIC
 ----------------------------------------------------------------------------------
     pulse <= pulse_buf;
+    -- turn the video on or off
     video_on <= (h_video_on and v_video_on);
 
 end Behavioral;
