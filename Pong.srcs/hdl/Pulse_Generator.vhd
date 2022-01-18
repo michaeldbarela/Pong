@@ -54,13 +54,12 @@ begin
 ----------------------------------------------------------------------------------
 -- SEQUENTIAL LOGIC
 ----------------------------------------------------------------------------------
-    process(clk) begin
-        if(rising_edge(clk)) then
-            if(reset = '1') then
-                Q <= (others => '0');
-            else
-                Q <= D;
-            end if;
+    -- current-state logic
+    process(clk, reset) begin
+        if(rising_edge(reset)) then
+            Q <= (OTHERS=>'0');
+        elsif(rising_edge(clk)) then
+            Q <= D;
         end if;
     end process;
 
