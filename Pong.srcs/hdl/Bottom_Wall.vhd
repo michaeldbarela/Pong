@@ -77,7 +77,7 @@ begin
     begin
         case(sel) is
             when "000" => bw_rgb <= (OTHERS=>'1');
-            when "001" => bw_rgb <= concat;
+            when "100" => bw_rgb <= not(concat);
             when others => bw_rgb <= bw_rgb;
         end case;
     end process;
