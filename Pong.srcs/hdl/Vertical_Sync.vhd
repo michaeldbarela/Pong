@@ -45,16 +45,20 @@ end Vertical_Sync;
 
 architecture Behavioral of Vertical_Sync is
 ----------------------------------------------------------------------------------
--- SIGNAL DECLARATIONS
+-- CONSTANT DECLARATIONS
 ----------------------------------------------------------------------------------
     -- vertical display lines
-    signal VD           : unsigned(8 downto 0) := to_unsigned(480, 9);
+    constant VD         : unsigned(8 downto 0) := to_unsigned(480, 9);
     -- vertical back porch lines
-    signal VB           : unsigned(5 downto 0) := to_unsigned(33, 6);
+    constant VB         : unsigned(5 downto 0) := to_unsigned(33, 6);
     -- vertical front porch lines
-    signal VF           : unsigned(3 downto 0) := to_unsigned(10, 4);
+    constant VF         : unsigned(3 downto 0) := to_unsigned(10, 4);
     -- vertical retrace lines
-    signal VRT          : unsigned(1 downto 0) := to_unsigned(2, 2);
+    constant VRT        : unsigned(1 downto 0) := to_unsigned(2, 2);
+
+----------------------------------------------------------------------------------
+-- SIGNAL DECLARATIONS
+----------------------------------------------------------------------------------
     -- current vertical sync signal
     signal v_sync_q     : std_logic;
     -- current vertical pixel position
