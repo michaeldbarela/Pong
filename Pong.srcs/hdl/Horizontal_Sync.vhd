@@ -44,16 +44,20 @@ end Horizontal_Sync;
 
 architecture Behavioral of Horizontal_Sync is
 ----------------------------------------------------------------------------------
--- SIGNAL DECLARATIONS
+-- CONSTANT DECLARATIONS
 ----------------------------------------------------------------------------------
     -- horizontal display pixels
-    signal HD           : unsigned(9 downto 0) := to_unsigned(640, 10);
+    constant HD         : unsigned(9 downto 0) := to_unsigned(640, 10);
     -- horizontal front porch pixels
-    signal HF           : unsigned(3 downto 0) := to_unsigned(16, 4);
+    constant HF         : unsigned(3 downto 0) := to_unsigned(16, 4);
     -- horizontal back porch pixels
-    signal HB           : unsigned(5 downto 0) := to_unsigned(48, 6);
+    constant HB         : unsigned(5 downto 0) := to_unsigned(48, 6);
     -- horizontal retrace pixels
-    signal HRT          : unsigned(7 downto 0) := to_unsigned(98, 8);
+    constant HRT        : unsigned(7 downto 0) := to_unsigned(98, 8);
+
+----------------------------------------------------------------------------------
+-- SIGNAL DECLARATIONS
+----------------------------------------------------------------------------------
     -- current horizontal sync signal
     signal h_sync_q     : std_logic;
     -- current horizontal pixel position
