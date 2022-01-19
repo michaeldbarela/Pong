@@ -45,6 +45,13 @@ end VGA_Sync;
 
 architecture Behavioral of VGA_Sync is
 ----------------------------------------------------------------------------------
+-- CONSTANT DECLARATIONS
+----------------------------------------------------------------------------------
+    -- constants for Pulse_Generator
+    constant pulse_gen_width    : positive := 2;
+    constant pulse_gen_max      : std_logic_vector := std_logic_vector(to_unsigned(4,pulse_gen_width));
+
+----------------------------------------------------------------------------------
 -- SIGNAL DECLARATIONS
 ----------------------------------------------------------------------------------
     signal h_end            : std_logic;
@@ -52,9 +59,6 @@ architecture Behavioral of VGA_Sync is
     signal v_end            : std_logic;
     signal v_video_on       : std_logic;
     signal pulse_buf        : std_logic;
-    -- signals for Pulse_Generator
-    signal pulse_gen_width  : positive := 2;
-    signal pulse_gen_max    : std_logic_vector := std_logic_vector(to_unsigned(4,pulse_gen_width));
 
 begin
 ----------------------------------------------------------------------------------
