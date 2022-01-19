@@ -46,7 +46,6 @@ entity Bottom_Wall is
 end Bottom_Wall; -- Bottom_Wall
 
 architecture Behavioral of Bottom_Wall is 
-
 ----------------------------------------------------------------------------------
 -- CONSTANT DECLARATIONS
 ----------------------------------------------------------------------------------
