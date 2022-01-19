@@ -61,29 +61,29 @@ architecture Behavioral of Ball is
 -- CONSTANT DECLARATIONS
 ----------------------------------------------------------------------------------
     constant BALL_SIZE      : positive := 3;
-    -- length of the left wall left side
+    -- position of the left wall left side
     constant LWL            : positive := 15;
-    -- length of the left wall right side
+    -- position of the left wall right side
     constant LWR            : positive := 20;
-    -- length of the left wall top side 1
+    -- position of the left wall top side 1
     constant LWT1           : positive := 40;
-    -- length of the left wall bottom side 1
+    -- position of the left wall bottom side 1
     constant LWB1           : positive := 210;
-    -- length of the left wall top side 2
+    -- position of the left wall top side 2
     constant LWT2           : positive := 270;
-    -- length of the left wall bottom side 2
+    -- position of the left wall bottom side 2
     constant LWB2           : positive := 461;
-    -- length of the right paddle left side
+    -- position of the right paddle left side
     constant RPL            : positive := 603;
-    -- length of the right paddle right side
+    -- position of the right paddle right side
     constant RPR            : positive := 608;
-    -- length of the left paddle left side
+    -- position of the left paddle left side
     constant LPL            : positive := 15;
-    -- length of the left paddle right side
+    -- position of the left paddle right side
     constant LPR            : positive := 20;
-    -- length of the top wall bottom side
+    -- position of the top wall bottom side
     constant TWB            : positive := 39;
-    -- length of the bottom wall top side
+    -- position of the bottom wall top side
     constant BWT            : positive := 462;
 
 ----------------------------------------------------------------------------------
@@ -144,11 +144,11 @@ begin
 ----------------------------------------------------------------------------------
 -- COMBINATIONAL LOGIC
 ----------------------------------------------------------------------------------
-    process 
+    process(all)
         variable concat : std_logic_vector(11 downto 0) := std_logic_vector(SW_red & SW_gre & SW_blu);
     begin
         -- determine color of asset based on switches
-        case(sel(2 downto 0))is 
+        case(sel(2 downto 0)) is 
             when "000" => ball_rgb <= (OTHERS=>'0');
             when "001" => ball_rgb <= concat;
             when others => ball_rgb <= ball_rgb;
@@ -216,9 +216,19 @@ begin
     -- determine if ball hits an object
     bounce_top <= '1' when (unsigned(ball_t) <= TWB) else '0';
     bounce_bot <= '1' when (unsigned(ball_b) >= BWT) else '0';
-    bounce_r_pad <= '1' when (unsigned(ball_b)>=unsigned(RPT) and unsigned(ball_t)<=unsigned(RPB) and unsigned(ball_r)>=unsigned(RPL) and unsigned(ball_r)<=unsigned(RPR)) else '0';
-    bounce_l_pad <= '1' when (sel(3)='1' and unsigned(ball_b)>=unsigned(LPT) and unsigned(ball_t)<=unsigned(LPB) and unsigned(ball_l)<=unsigned(LPR) and unsigned(ball_l)>=unsigned(LPL)) else '0';
-    bounce_l_wall <= '1' when (sel(3)='0' and unsigned(ball_l)<=LWR and (unsigned(ball_t)<=LWB1 or unsigned(ball_b)>=LWT2)) else '0';
+    bounce_r_pad <= '1' when (unsigned(ball_b) >= unsigned(RPT) and 
+                              unsigned(ball_t) <= unsigned(RPB) and 
+                              unsigned(ball_r) >= RPL and 
+                              unsigned(ball_r) <= RPR) else '0';
+    bounce_l_pad <= '1' when (sel(3)='1' and 
+                              unsigned(ball_b) >= unsigned(LPT) and 
+                              unsigned(ball_t) <= unsigned(LPB) and 
+                              unsigned(ball_l) <= LPR and 
+                              unsigned(ball_l) >= LPL) else '0';
+    bounce_l_wall <= '1' when (sel(3)='0' and 
+                               unsigned(ball_l) <= LWR and 
+                               (unsigned(ball_t) <= LWB1 or 
+                               unsigned(ball_b) >= LWT2)) else '0';
 
     -- determine if there was a goal
     right_goal <= '1' when (unsigned(ball_l) >= RPR) else '0';
