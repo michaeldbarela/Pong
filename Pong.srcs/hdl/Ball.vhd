@@ -170,19 +170,62 @@ begin
         end if;
 
         -- resets ball to center after a goal, pauses, and increments score
+        if(right_goal = '1') then
+            score_l_D <= std_logic_vector(unsigned(score_l_Q)+1) when (unsigned(score_l_Q)<9) else (OTHERS=>'0');
+            score_r_D <= score_r_Q;
+            pause_D <= '1'; -- flag for pause state
+            ball_x_D <= std_logic_vector(to_unsigned(320, ball_x_D'length)); -- initial x location
+            ball_y_D <= std_logic_vector(to_unsigned(240, ball_y_D'length)); -- initial y location
+        elsif(left_goal = '1') then
+            score_l_D <= score_l_Q;
+            score_r_D <= std_logic_vector(unsigned(score_r_Q)+1) when (unsigned(score_r_Q)<9) else (OTHERS=>'0');
+            pause_D <= '1'; -- flag for pause state
+            ball_x_D <= std_logic_vector(to_unsigned(320, ball_x_D'length)); -- initial x location
+            ball_y_D <= std_logic_vector(to_unsigned(240, ball_y_D'length)); -- initial y location
+        else
+            score_l_D <= score_l_Q;
+            score_r_D <= score_r_Q;
+        end if;
 
         -- changes direction after a bounce
         --  x: =0 means left; =1 means right
         --  y: =0 means down; =1 means up
+        if(bounce_top) then
+            y_dir_D <= '0';
+        elsif(bounce_bot) then
+            y_dir_D <= '1';
+        elsif(bounce_r_pad) then
+            x_dir_D <= '0';
+        elsif(bounce_l_pad) then
+            x_dir_D <= '1';
+        elsif(bounce_l_wall) then
+            x_dir_D <= '1';
+        else
+            x_dir_D <= x_dir_Q;
+            y_dir_D <= y_dir_Q;
+        end if;
 
     end process;
 
     -- detemine ball boundaries
+    ball_t <= std_logic_vector(unsigned(ball_y_Q) - BALL_SIZE);
+    ball_b <= std_logic_vector(unsigned(ball_y_Q) + BALL_SIZE);
+    ball_r <= std_logic_vector(unsigned(ball_x_Q) + BALL_SIZE);
+    ball_l <= std_logic_vector(unsigned(ball_x_Q) - BALL_SIZE);
 
     -- determine if ball hits an object
+    bounce_top <= '1' when (unsigned(ball_t) <= TWB) else '0';
+    bounce_bot <= '1' when (unsigned(ball_b) >= BWT) else '0';
+    bounce_r_pad <= '1' when (unsigned(ball_b)>=unsigned(RPT) and unsigned(ball_t)<=unsigned(RPB) and unsigned(ball_r)>=unsigned(RPL) and unsigned(ball_r)<=unsigned(RPR)) else '0';
+    bounce_l_pad <= '1' when (sel(3)='1' and unsigned(ball_b)>=unsigned(LPT) and unsigned(ball_t)<=unsigned(LPB) and unsigned(ball_l)<=unsigned(LPR) and unsigned(ball_l)>=unsigned(LPL)) else '0';
+    bounce_l_wall <= '1' when (sel(3)='0' and unsigned(ball_l)<=LWR and (unsigned(ball_t)<=LWB1 or unsigned(ball_b)>=LWT2)) else '0';
 
     -- determine if there was a goal
+    right_goal <= '1' when (unsigned(ball_l) >= RPR) else '0';
+    left_goal <= '1' when (sel(3)='1' and unsigned(ball_r)<=LPL) else
+                 '1' when (sel(3)='0' and unsigned(ball_r)<=LWL) else '0';
 
     -- assert if ball is within range of pixel x and pixel y
+    EN_ball <= '1' when ((pixel_x>=ball_l) and (pixel_x<=ball_r) and (pixel_y>=ball_t) and (pixel_y<=ball_b)) else '0';
 
 end Behavioral;
