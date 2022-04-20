@@ -4,7 +4,7 @@
 -- 
 -- Create Date: 01/19/2022
 -- Design Name: 
--- Module Name: Left_Paddle
+-- Module Name: Right_Paddle
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -30,7 +30,7 @@ use IEEE.NUMERIC_STD.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Left_Paddle is
+entity Right_Paddle is
     port(
         -- input
         clk         : in std_logic;
@@ -49,9 +49,9 @@ entity Left_Paddle is
         lpb         : out std_logic_vector(9 downto 0);
         lp_rgb      : out std_logic_vector(11 downto 0)
     );
-end Left_Paddle;
+end Right_Paddle;
 
-architecture Behavioral of Left_Paddle is 
+architecture Behavioral of Right_Paddle is 
 ----------------------------------------------------------------------------------
 -- CONSTANT DECLARATIONS
 ----------------------------------------------------------------------------------
