@@ -15,3 +15,10 @@
 *.log
 
 # Unecessary directories and files created by Vitis
+
+
+# Unecessary directories and files created by ModelSim
+Pong.libs/
+transcript
+*.ini
+*.wlf
