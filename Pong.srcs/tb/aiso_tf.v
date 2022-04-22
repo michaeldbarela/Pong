@@ -26,9 +26,9 @@ module aiso_tf;
 //////////////////////////////////////////
 //         Device Under Test
 //////////////////////////////////////////     
-    aiso dut1( .clk( clk ),
-               .reset( reset ),
-               .aiso_reset( aiso_reset ) );
+    AISO_Reset dut1( .clk( clk ),
+                     .reset( reset ),
+                     .aiso_reset( aiso_reset ) );
                    
 //////////////////////////////////////////
 //      Self Checking Test Bench
@@ -41,13 +41,15 @@ module aiso_tf;
         #10; reset = 0;
         #20; reset = 1; check_reset;
         if(errorCount == 0)
-            $display("NO ERRORS FOUND IN VGA SYNC MODULE.");
+            $display("NO ERRORS FOUND IN AISO RESET MODULE.");
+        else
+            $display("ERRORS FOUND IN AISO RESET MODULE. NUMBER OF ERRORS = %d", errorCount);
         #10; $stop;
     end
     
     //Counts a lot of times
     task check_reset; begin
-        //Check after not allowing enought time for the aiso_reset to go high
+        //Check after not allowing enough time for the aiso_reset to go high
         if( aiso_reset == 1 ) begin
             $display("ERROR: AISO RESET WENT HIGH TOO EARLY AT TIME %d ns", $time);
                 errorCount = errorCount + 1;
