@@ -1,4 +1,3 @@
-
 # directory locations
 VHDL_RTL_DIR 	= Pong.srcs/rtl/vhdl
 VLOG_RTL_DIR 	= Pong.srcs/rtl/vlog
@@ -79,7 +78,7 @@ sv_tb:
 all: library modelsim \
 		vlog_rtl vlog_tb \
 		vhdl_rtl vhdl_tb \
-		sv_rtl sv_tb
+		sv_rtl sv_tb 
 
 init: library modelsim
 
